@@ -1,0 +1,65 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: matic
+    source:
+      address: "0xa6eE707Ee21759833FaaE0edf8EBeb18Cd9f6d12"
+      abi: Factory
+      startBlock: 6385083 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Game
+        - Question
+        - Market
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+        - name: GameQuestion
+          file: ./abis/GameQuestion.json
+      eventHandlers:
+        - event: QuestionCreated(indexed bytes32,indexed bytes32,indexed address,uint256)
+          handler: handleQuestionCreated
+      file: ./src/factory.ts
+templates:
+  - name: GameQuestion
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: GameQuestion
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/game-question.ts
+      entities:
+        - Market
+        - Question
+        - User
+        - Bet
+      abis:
+        - name: GameQuestion
+          file: ./abis/GameQuestion.json
+        - name: Factory
+          file: ./abis/Factory.json
+      eventHandlers:
+        - event: PlaceBetA(indexed address,indexed bytes32,uint256)
+          handler: handleBetA
+        - event: PlaceBetB(indexed address,indexed bytes32,uint256)
+          handler: handleBetB
+        - event: Claim(indexed address,indexed bytes32,uint256)
+          handler: handleClaim
+        - event: AnswerSet(indexed bytes32,uint8)
+          handler: handleAnswerSet
+        - event: RewardsCalculated(indexed bytes32,uint256,uint256,uint256)
+          handler: handleRewardsCalculated
+        - event: Pause(indexed bytes32)
+          handler: handlePause
+        - event: Unpause(indexed bytes32)
+          handler: handleUnpause
+        

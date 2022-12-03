@@ -1,0 +1,16 @@
+{
+  "name": "prediction-testing",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ Chota-Bheem-Codes/prediction-market subgraph.yaml",
+    "create-local": "graph create --node http://localhost:8020/ prediction-testing",
+    "remove-local": "graph remove --node http://localhost:8020/ prediction-testing",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 prediction-testing"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.22.1",
+    "@graphprotocol/graph-ts": "0.22.1"
+  }
+}

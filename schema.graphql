@@ -1,0 +1,111 @@
+enum Position {
+    A
+    B
+    C
+}
+
+type Market @entity {
+    id: ID!
+
+    paused: Boolean!
+
+    # Users
+    totalUsers: BigInt!
+
+    # Bets
+    totalBets: BigInt!
+    totalBetA: BigInt!
+    totalBetB: BigInt!
+    totalMoney: BigDecimal!
+    totalBetAAmount: BigDecimal!
+    totalBetBAmount: BigDecimal!
+    totalTreasury: BigDecimal!
+
+    # Statistics
+    totalBetsClaimed: BigInt!
+    totalMoneyClaimed: BigDecimal!
+    winRate: BigDecimal!
+    averageMoney: BigDecimal!
+    netMoney: BigDecimal!
+}
+
+type Game @entity {
+  id: ID!
+  createdAt: BigInt!
+  questions: [Question!]!@derivedFrom(field: "game")
+}
+
+type Question @entity {
+    id: ID!
+    
+    createdAt: BigInt!
+
+    game: Game!
+    address: String!
+
+    position: Position
+    failed: Boolean
+
+    # End
+    ended: Boolean
+    closeBlock: BigInt
+
+    # Bets
+    totalBets: BigInt!
+    totalAmount: BigDecimal!
+    ABets: BigInt!
+    ABetAmount: BigDecimal!
+    BBets: BigInt!
+    BBetAmount: BigDecimal!
+    bets: [Bet!]! @derivedFrom(field: "question")
+}
+
+type User @entity {
+    id: ID!
+  
+    createdAt: BigInt!
+    updatedAt: BigInt!
+
+    block: BigInt!
+
+    # Bets
+    totalBets: BigInt!
+    totalBetA: BigInt!
+    totalBetB: BigInt!
+    totalMoney: BigDecimal!
+    totalBetAAmount: BigDecimal!
+    totalBetBAmount: BigDecimal!
+    bets: [Bet!]! @derivedFrom(field: "user")
+
+    # Statistics
+    totalBetsClaimed: BigInt!
+    totalMoneyClaimed: BigDecimal!
+    winRate: BigDecimal!
+    averageMoney: BigDecimal!
+    netMoney: BigDecimal!
+}
+
+type Bet @entity {
+    id: ID!
+
+    # epoch
+    question: Question!
+
+    user: User!
+    hash: Bytes!
+
+    amount: BigDecimal!
+    position: Position!
+
+    claimed: Boolean!
+    claimedAt: BigInt
+    claimedBlock: BigInt
+    claimedHash: Bytes
+    claimedMoney: BigDecimal
+    claimedNetMoney: BigDecimal
+
+    createdAt: BigInt!
+    updatedAt: BigInt!
+
+    block: BigInt!
+}
